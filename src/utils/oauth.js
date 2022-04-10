@@ -1,10 +1,14 @@
 import passport from "passport"
 import { Strategy } from "passport-google-oauth20"
-
 import User from "../service/schema/userSchema.js"
 import {JwtAuth} from "../utils/jwtTool.js"
-process.env.TS_NODE_DEV && require("dotenv").config()
+import dotenv from 'dotenv'
 
+dotenv.config()
+
+// process.env.TS_NODE_DEV && require("dotenv").config()
+
+// console.log(process.env.GOOGLE_ID)
 const googleStrategy = new Strategy({
   clientID: process.env.GOOGLE_ID ,
   clientSecret: process.env.GOOGLE_SECRET ,
