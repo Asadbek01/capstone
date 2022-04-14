@@ -9,7 +9,7 @@ console.log(process.env.GOOGLE_ID)
 const googleStrategy = new Strategy({
   clientID: process.env.GOOGLE_ID || "",
   clientSecret: process.env.GOOGLE_SECRET || "",
-  callbackURL: `${process.env.API_URL}/user/googleRedirect`,
+  callbackURL: `${process.env.API_URL}/users/googleRedirect`,
   passReqToCallback: true
 },
   async function (request, accessToken, refresh, profile, done) {

@@ -16,15 +16,13 @@ productRouter.post("/new", async (req, res, next) => {
 // 2
 productRouter.get("/", async (req, res, next) => {
     try {
-        const resPerPage = 8
         const bookCount = await ProductModel.countDocuments()
         const query = q2m(req.query)
         const book = await ProductModel.find(query.criteria)    
         .sort(query.options.sort)
         .skip(query.options.skip || 0)
         .limit(query.options.limit) 
-        // .pagination(resPerPage)
-        res.status(200).send(book, resPerPage, bookCount)    
+        res.status(200).send(book)    
     } catch (error) {
         next(error)
     }

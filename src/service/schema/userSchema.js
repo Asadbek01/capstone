@@ -27,6 +27,7 @@ const UserModel = new Schema(
             minlength: [6, 'Your Password must be longer then 6 characters'],
         },
         avatar: {
+          
             public_id: {type: String, default: "avatar/images_lyk4bu"},
               url:{type: String, default: 'https://res.cloudinary.com/strive01/image/upload/v1646033501/avatar/images_lyk4bu.jpg'}
         },
