@@ -36,7 +36,7 @@ userRouter.get(
   
   userRouter.get(
     "/googleRedirect",
-    passport.authenticate("google"),
+    passport.authenticate("google"),  
     async (req, res, next) => {
       try {
         console.log("TOKENS: ", req.user.token);

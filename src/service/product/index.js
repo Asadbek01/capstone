@@ -16,13 +16,18 @@ productRouter.post("/new", async (req, res, next) => {
 // 2
 productRouter.get("/", async (req, res, next) => {
     try {
-        const bookCount = await ProductModel.countDocuments()
         const query = q2m(req.query)
+        console.log(query);
+        const { criteria, options } = query
+        let { sort, skip, limit } = options
+        limit = limit || 10
+        const totalBooks = await ProductModel.countDocuments(criteria)
         const book = await ProductModel.find(query.criteria)    
-        .sort(query.options.sort)
-        .skip(query.options.skip || 0)
-        .limit(query.options.limit) 
-        res.status(200).send(book)    
+        .sort(sort)
+        .skip(skip || 0)
+        .limit(limit) 
+        const pages = Math.ceil(totalBooks / limit)
+        res.status(200).send({ totalBooks, pages, book, link: query.links("/books", 2) })    
     } catch (error) {
         next(error)
     }
