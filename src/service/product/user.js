@@ -6,6 +6,7 @@ import { JwtAuth } from "../../utils/jwtTool.js"
 import { JwtAuthMiddleware } from "../../utils/tokenMiddleware.js"
 import { MainAuthMiddleware } from "../../utils/MainAuthMiddleware.js"
 import passport from "passport"
+import createHttpError from "http-errors"
 const userRouter = express.Router()
 // 1
 userRouter.post("/register", async(req, res, next) => {
@@ -97,7 +98,7 @@ userRouter.post("/login", async (req, res, next) => {
           const accessToken = await JwtAuth(user)
           res.status(201).send({accessToken})
       }else{
-          throw new createError(401, "Crediantials are not ok")
+          throw new createHttpError(401, "Crediantials are not ok")
       }
   } catch (error) {
       next(error)
