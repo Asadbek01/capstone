@@ -17,7 +17,6 @@ productRouter.post("/new", async (req, res, next) => {
 productRouter.get("/", async (req, res, next) => {
     try {
         const query = q2m(req.query)
-        console.log(query);
         const { criteria, options } = query
         let { sort, skip, limit } = options
         limit = limit || 10
@@ -27,7 +26,7 @@ productRouter.get("/", async (req, res, next) => {
         .skip(skip || 0)
         .limit(limit) 
         const pages = Math.ceil(totalBooks / limit)
-        res.status(200).send({ totalBooks, pages, book, link: query.links("/books", 2) })    
+        res.status(200).send({ totalBooks, pages, book, })    
     } catch (error) {
         next(error)
     }
