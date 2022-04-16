@@ -3,9 +3,7 @@
      const token = accessToken
          //  options for cookie
      const options = {
-         expiresIn: new Date(
-             Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
-         ),
+        expiresIn: "1 week",
          httpOnly: true
         }
         // console.log(process.env.COOKIE_EXPIRES_TIME)

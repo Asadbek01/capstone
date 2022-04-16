@@ -29,12 +29,26 @@ userRouter.get("/", JwtAuthMiddleware,  async (req, res, next) => {
           res.send(user)
         
     } catch (error) {
-        next(error)
+      next(error)
     }
 })
+userRouter.get("/logout", async (req, res, next) => {
+  try {
+   res.cookie("token", null, {
+     expires: new Date(Date.now()),
+     httpOnly: true
+   })
+   res.status(200).json({
+   success: true,
+   message: "Successfully logged out"
+   })
+} catch (error) {
+    next(error.message)
+  }
+})  
 userRouter.get(
-    "/googleLogin",
-    passport.authenticate("google", { scope: ["email", "profile"] })
+  "/googleLogin",
+  passport.authenticate("google", { scope: ["email", "profile"] })
   );
   
   userRouter.get(
@@ -109,20 +123,6 @@ userRouter.post("/login", async (req, res, next) => {
     }
   })  
 
-  userRouter.get("/logout", async (req, res, next) => {
-    try {
-     res.cookie("token" , null, {
-       expires: new Date(Date.now()),
-       httpOnly: true
-     })
-     res.status(200).json({
-     success: true,
-     message: "Successfully logged out"
-     })
-  } catch (error) {
-      next(error.message)
-    }
-  })  
 
 
 export default userRouter
