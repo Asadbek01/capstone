@@ -13,10 +13,9 @@ const userRouter = express.Router()
 userRouter.post("/register", async(req, res, next) => {
     try {
         const user = new userSchema(req.body)
+        await user.save()
         const accessToken = await JwtAuth(user)
-        const {_id} = await user.save()
-        res.status(201).send({_id})
-        sendToken(accessToken, 200, res)
+        sendToken(user, accessToken, 200, res)
     } catch (error) {
        next(error) 
     }

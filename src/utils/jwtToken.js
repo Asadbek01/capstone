@@ -1,5 +1,5 @@
 
- const sendToken = (accessToken, statusCode, res) => {
+ const sendToken = (user, accessToken, statusCode, res) => {
      const token = accessToken
          //  options for cookie
      const options = {
@@ -10,7 +10,7 @@
       res.status(statusCode).cookie("token",token, options).json({
           success: true,
           token,
-          
+          user
       })
     }
 

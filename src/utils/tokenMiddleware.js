@@ -12,7 +12,7 @@ export const JwtAuthMiddleware = async(req, res, next) => {
       createError(401, "Please login first in order to access!")
       )
     } 
-    console.log(token)
+    console.log("asa", token)
       
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     req.user = await userSchema.findById(decoded.id)
