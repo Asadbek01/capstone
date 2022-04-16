@@ -16,7 +16,8 @@ productRouter.post("/new", async (req, res, next) => {
     }
 })
 // 2
-productRouter.get("/", JwtAuthMiddleware, async (req, res, next) => {
+
+productRouter.get("/", async (req, res, next) => {
     try {
         const query = q2m(req.query)
         const { criteria, options } = query

@@ -112,7 +112,7 @@ userRouter.post("/login", async (req, res, next) => {
       const user = await userSchema.checkCredentials(email, password)
       if(user) {
           const accessToken = await JwtAuth(user)
-          sendToken(accessToken, 200, res)
+          sendToken(user, accessToken,  200, res)
 
       }else{
           throw new createHttpError(401, "Crediantials are not ok")

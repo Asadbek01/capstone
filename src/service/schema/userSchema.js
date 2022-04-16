@@ -20,6 +20,7 @@ const UserModel = new Schema(
             required: [true, ' Please insert your email'],
             validate: [validator.isEmail, "Please insert a valid email adress"]
         },
+       
          role:{ type: String, enum: ["user", "admin"], default: "user"},
         password: {
             type: String,

@@ -16,7 +16,7 @@ jwt.sign(payload, process.env.JWT_SECRET,{expiresIn: "1 week"}, (err, token) =>{
 
 export const verifyToken = token => 
 new Promise((res, rej) =>
-jwt.verify(JSON.stringify(token), process.env.JWT_SECRET, (err , payload) =>{
+jwt.verify(token, process.env.JWT_SECRET, (err , payload) =>{
     if (err) rej(err)
     else res(payload)
 })

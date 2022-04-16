@@ -6,7 +6,7 @@ import jwt  from "jsonwebtoken"
 
 export const JwtAuthMiddleware = async(req, res, next) => {
 
-  const  {token}  = req.cookies
+  const  { token } = req.cookies
   if (!token) {
     next(
       createError(401, "Please login first in order to access!")
@@ -14,8 +14,8 @@ export const JwtAuthMiddleware = async(req, res, next) => {
     } 
     console.log("asa", token)
       
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    req.user = await userSchema.findById(decoded.id)
+    const user =  verifyToken(token)
+    req.user = await userSchema.findById(user.id)
     
     next()
   }

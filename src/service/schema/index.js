@@ -16,6 +16,11 @@ const {model, Schema}= mongoose
         maxLength: [5, "Product can exceed 99 char"],
         default: 0.0
     },
+    stock: {
+        type: Number,
+        required: [true, "Please insert stock value"]
+
+    },
     subtitle: {
         type: String,
         required: [true, "Please enter product description"],
@@ -25,10 +30,11 @@ const {model, Schema}= mongoose
         default: 0
     },
     
-    image: [
+    images: [
         {
             imgUrl: {
-                type: String
+                type: String,
+                required: true
             },
             
 
@@ -38,6 +44,7 @@ const {model, Schema}= mongoose
             required: [true,"Please select category"],
             enum:{
                 values:[
+                    "All",
                     'History',
                     'Poetry',
                     'Philosophy',
