@@ -5,7 +5,7 @@ export const JwtAuth = async user => {
         return accessToken
     }
 
-const generateToken = payload =>
+ export const generateToken = payload =>
 new Promise((resolved, rejected) =>
 jwt.sign(payload, process.env.JWT_SECRET,{expiresIn: "1 week"}, (err, token) =>{
     if (err) rejected (err)
@@ -16,7 +16,7 @@ jwt.sign(payload, process.env.JWT_SECRET,{expiresIn: "1 week"}, (err, token) =>{
 
 export const verifyToken = token => 
 new Promise((res, rej) =>
-jwt.verify(token, process.env.JWT_SECRET, (err , payload) =>{
+jwt.verify(JSON.stringify(token), process.env.JWT_SECRET, (err , payload) =>{
     if (err) rej(err)
     else res(payload)
 })

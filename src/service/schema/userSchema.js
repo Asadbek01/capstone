@@ -77,4 +77,4 @@ UserModel.methods.toJson = function(){
   }
 
 
-export default model("User", UserModel)
+export default model("user", UserModel)

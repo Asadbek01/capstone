@@ -1,6 +1,8 @@
 import express from "express"
 import ProductModel from "../schema/index.js"
 import q2m from 'query-to-mongo'
+import { MainAuthMiddleware } from "../../utils/MainAuthMiddleware.js"
+import { JwtAuthMiddleware } from "../../utils/tokenMiddleware.js"
 const productRouter = express.Router()
 // 1
 productRouter.post("/new", async (req, res, next) => {
@@ -14,12 +16,12 @@ productRouter.post("/new", async (req, res, next) => {
     }
 })
 // 2
-productRouter.get("/", async (req, res, next) => {
+productRouter.get("/", JwtAuthMiddleware, async (req, res, next) => {
     try {
         const query = q2m(req.query)
         const { criteria, options } = query
         let { sort, skip, limit } = options
-        limit = limit || 10
+        limit = 10
         const totalBooks = await ProductModel.countDocuments(criteria)
         const book = await ProductModel.find(query.criteria)    
         .sort(sort)

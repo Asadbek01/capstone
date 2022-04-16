@@ -7,13 +7,16 @@ import { JwtAuthMiddleware } from "../../utils/tokenMiddleware.js"
 import { MainAuthMiddleware } from "../../utils/MainAuthMiddleware.js"
 import passport from "passport"
 import createHttpError from "http-errors"
+import  sendToken from "../../utils/jwtToken.js"
 const userRouter = express.Router()
 // 1
 userRouter.post("/register", async(req, res, next) => {
     try {
         const user = new userSchema(req.body)
+        const accessToken = await JwtAuth(user)
         const {_id} = await user.save()
         res.status(201).send({_id})
+        sendToken(accessToken, 200, res)
     } catch (error) {
        next(error) 
     }
@@ -96,7 +99,8 @@ userRouter.post("/login", async (req, res, next) => {
       const user = await userSchema.checkCredentials(email, password)
       if(user) {
           const accessToken = await JwtAuth(user)
-          res.status(201).send({accessToken})
+          sendToken(accessToken, 200, res)
+
       }else{
           throw new createHttpError(401, "Crediantials are not ok")
       }
@@ -104,5 +108,21 @@ userRouter.post("/login", async (req, res, next) => {
       next(error)
     }
   })  
+
+  userRouter.get("/logout", async (req, res, next) => {
+    try {
+     res.cookie("token" , null, {
+       expires: new Date(Date.now()),
+       httpOnly: true
+     })
+     res.status(200).json({
+     success: true,
+     message: "Successfully logged out"
+     })
+  } catch (error) {
+      next(error.message)
+    }
+  })  
+
 
 export default userRouter

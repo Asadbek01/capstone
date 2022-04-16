@@ -11,12 +11,14 @@ import { notFoundHandler,
 import userRouter from "./service/product/user.js"
 import googleStrategy from "./utils/oauth.js"
 import passport from "passport"
+import cookieParser from 'cookie-parser'
 
 const server = express();
 const port = process.env.PORT 
 
 
 server.use(express.json());
+server.use(cookieParser())
 server.use(cors());
 passport.use("google", googleStrategy)
 
