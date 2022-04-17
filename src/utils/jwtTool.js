@@ -22,6 +22,21 @@ jwt.verify(token, process.env.JWT_SECRET, (err , payload) =>{
 })
 ) 
 
+// export const sendToken = (user, statusCode, res) => {
+//     const token = user.getJwtToken(user._id)
+//          const cookieOptions = {
+//             expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+//             HttpOnly: true,
+
+//          }
+//     res.status(statusCode).cookie(token, cookieOptions).json({
+//         success: true,
+//         token,
+//         user
+//     })
+         
+    
+        // }
 // const generateRefreshJwtToken = payload =>
 // new Promise ((rejected, resolved) =>
 // jwt.sign(payload, process.env.REFRESH_SECRET,{expiresIn: '1 week'}, (err,token) =>{

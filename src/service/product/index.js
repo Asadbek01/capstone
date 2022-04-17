@@ -22,7 +22,7 @@ productRouter.get("/", async (req, res, next) => {
         const query = q2m(req.query)
         const { criteria, options } = query
         let { sort, skip, limit } = options
-        limit = 10
+        limit = 20
         const totalBooks = await ProductModel.countDocuments(criteria)
         const book = await ProductModel.find(query.criteria)    
         .sort(sort)

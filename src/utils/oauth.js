@@ -1,7 +1,8 @@
+import  jwt  from "jsonwebtoken"
 import passport from "passport"
 import { Strategy } from "passport-google-oauth20"
 import User from "../service/schema/userSchema.js"
-import {JwtAuth} from "../utils/jwtTool.js"
+// import {JwtAuth} from "../utils/jwtTool.js"
 
 process.env.TS_NODE_DEV && require("dotenv").config()
 
@@ -33,7 +34,7 @@ const googleStrategy = new Strategy({
           })
 
         //   const savedUser = await newUser.save()
-          const token = await JwtAuth(newUser)
+          const token = jwt
 
           done(null, { _id: newUser._id, token })
         }

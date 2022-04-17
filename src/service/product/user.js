@@ -4,10 +4,8 @@ import { JwtAuth } from "../../utils/jwtTool.js"
 // import createError from "http-errors"
 // import { AdminonlyMiddleware } from "../admin/admin.js"
 import { JwtAuthMiddleware } from "../../utils/tokenMiddleware.js"
-import { MainAuthMiddleware } from "../../utils/MainAuthMiddleware.js"
 import passport from "passport"
 import createHttpError from "http-errors"
-import  sendToken from "../../utils/jwtToken.js"
 const userRouter = express.Router()
 // 1
 userRouter.post("/register", async(req, res, next) => {
@@ -15,14 +13,14 @@ userRouter.post("/register", async(req, res, next) => {
         const user = new userSchema(req.body)
         await user.save()
         const accessToken = await JwtAuth(user)
-        sendToken(user, accessToken, 200, res)
+        res.send({ accessToken })
     } catch (error) {
        next(error) 
     }
 }) 
 
 // 2
-userRouter.get("/", JwtAuthMiddleware,  async (req, res, next) => {
+userRouter.get("/",   async (req, res, next) => {
     try {
         const user = await userSchema.find()
           res.send(user)
@@ -33,10 +31,7 @@ userRouter.get("/", JwtAuthMiddleware,  async (req, res, next) => {
 })
 userRouter.get("/logout", async (req, res, next) => {
   try {
-   res.cookie("token", null, {
-     expires: new Date(Date.now()),
-     httpOnly: true
-   })
+  localStorage.removeItem('MyToken')
    res.status(200).json({
    success: true,
    message: "Successfully logged out"
@@ -112,8 +107,7 @@ userRouter.post("/login", async (req, res, next) => {
       const user = await userSchema.checkCredentials(email, password)
       if(user) {
           const accessToken = await JwtAuth(user)
-          sendToken(user, accessToken,  200, res)
-
+          res.send({ accessToken })
       }else{
           throw new createHttpError(401, "Crediantials are not ok")
       }

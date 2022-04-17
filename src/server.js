@@ -19,6 +19,8 @@ const port = process.env.PORT
 
 server.use(express.json());
 server.use(cookieParser())
+
+
 server.use(cors());
 passport.use("google", googleStrategy)
 
