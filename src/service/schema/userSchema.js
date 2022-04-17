@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs"
 import mongoose from "mongoose"
 import validator from "validator"
 import jwt from "jsonwebtoken"
+import  crypto  from "crypto"
 const { Schema, model } = mongoose
 
 
@@ -85,6 +86,25 @@ UserModel.methods.getJwtToken = function () {
   });
 }
 
+// generating reset password token
+UserModel.methods.getResetPasswordToken = function() {
+  const resetToken = crypto.randomBytes(20).toString( "hex")
+// hash and set to resetpwtoken
+
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+
+  // Seting expiry date
+  this.resetPasswordExpire = new Date(Date.now() + 30 * 60 * 60 * 1000)
+
+return resetToken
+ 
+}
+
+//  reset password
+UserModel.methods.getNewPassword = function() {
+  const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+
+
 // Generate password reset token
 // userSchema.methods.getResetPasswordToken = function () {
 //   // Generate token
@@ -99,6 +119,6 @@ UserModel.methods.getJwtToken = function () {
 //   return resetToken
 
 // }
-
+}
 
 export default model("user", UserModel)

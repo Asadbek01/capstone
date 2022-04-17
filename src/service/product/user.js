@@ -6,7 +6,10 @@ import { JwtAuth } from "../../utils/jwtTool.js"
 import { JwtAuthMiddleware } from "../../utils/tokenMiddleware.js"
 import passport from "passport"
 import createHttpError from "http-errors"
+import sendEmail from "../../utils/SendingEmail.js"
+import crypto from "crypto"
 const userRouter = express.Router()
+
 // 1
 userRouter.post("/register", async(req, res, next) => {
     try {
@@ -115,6 +118,50 @@ userRouter.post("/login", async (req, res, next) => {
       next(error)
     }
   })  
+
+  userRouter.post("/password/forgot", async(req, res, next) => {
+    const user =  await userSchema.findOne({email: req.body.email})
+    if(!user) return next(createHttpError(404, 'User not found with  this email'))
+const resetToken =  user.getResetPasswordToken()
+await user.save({validateBeforeSave: false}) 
+
+// Create resrt password url
+ const resetUrl = `${req.protocol}://${req.get('host')}/users/password/reset/${resetToken}`
+ const message = `Your password reset token is as follow: \n\n${resetUrl}\n\n if you have not requested skip it`
+try {
+  await sendEmail({
+    email: user.email,
+    subject: "Asadbek's project Password Recovery",
+    message
+  })
+res.status(200).json({
+  success: true,
+  message: `Email sent to: ${user.email}`
+})
+
+} catch (error) {
+  user.resetPasswordToken= undefined
+  user.resetPasswordExpire= undefined
+
+await user.save({validateBeforeSave: false})
+return next(createHttpError(500, error.message))
+}
+  })
+
+  userRouter.put("/password/reset/:token", async(req, res, next) => {
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+    const user =  await userSchema.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: {$gt: Date.now()}
+    })
+    if(!user) return next(createHttpError(400, "Password reset token invalid or expired"))
+   if(req.body.password !== req.body.confirmPassword) return next(createHttpError(400, "Password doesn't match"))
+  user.password =req.body.password
+   user.resetPasswordToken= undefined
+   user.resetPasswordExpire= undefined
+   await user.save()
+   res.send(user)
+  })
 
 
 
