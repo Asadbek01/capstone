@@ -33,7 +33,7 @@ const UserModel = new Schema(
         avatar: {
           
             public_id: {type: String, default: "avatar/images_lyk4bu"},
-              url:{type: String, default: 'https://res.cloudinary.com/strive01/image/upload/v1646033501/avatar/images_lyk4bu.jpg'}
+              url:{type: String, default: "https://res.cloudinary.com/strive01/image/upload/v1650327061/PrettyPages/new.png"}
         },
         googleId: {type: String},
         resetPasswordToken: String,

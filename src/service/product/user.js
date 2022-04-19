@@ -8,6 +8,7 @@ import passport from "passport"
 import createHttpError from "http-errors"
 import sendEmail from "../../utils/SendingEmail.js"
 import crypto from "crypto"
+import { cloudinary, parser } from "../../utils/cloudinary.js"
 const userRouter = express.Router()
 
 // 1
@@ -72,6 +73,63 @@ userRouter.get("/me",  JwtAuthMiddleware, async (req, res, next) => {
         next(error)
     }
 })
+
+userRouter.put("/me/update",  parser.single("avatarImage"),  JwtAuthMiddleware, async (req, res, next) => {
+  try {
+  // const user = await userSchema.findByIdAndUpdate(req.user._id, req.body, {
+  //   new: true,
+  // });
+  // if (user) {
+  //   res.send(user);
+  // }
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email
+}
+
+const user = await userSchema.findByIdAndUpdate(req.user._id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false
+})
+
+  //update avatar
+  const body = req.body;
+
+  console.log('body:', body);
+  console.log('req:', req);
+
+
+  const name = body.name;
+  const email = body.email;
+
+  const updates = {
+      name,
+      email,
+      };
+
+  if (req.file) {
+      const image = req.file.filename;
+      updates.image = image;
+  }
+
+res.status(200).json({
+  success: true,
+  user
+})
+  } catch (error) {
+      next(error)
+  }
+})
+
+// userRouter.post("/me/avatar", parser.single('userAvatar'),  JwtAuthMiddleware, async (req, res, next) => {
+//   try {
+//     res.json(req.file)
+
+//   } catch (error) {
+//       next(error)
+//   }
+// })
 // 3
 userRouter.get("/:id", async (req, res, next) => {
     try {
