@@ -32,10 +32,15 @@ const {model, Schema}= mongoose
     
     images: [
         {
+            public_id: {
+                type: String,
+                required: true
+            },
             imgUrl: {
                 type: String,
                 required: true
             },
+          
             
 
         }],
