@@ -85,7 +85,10 @@ userRouter.put('/me/update', JwtAuthMiddleware,  parser.single('avatarImage'), a
             
                  await cloudinary.uploader.destroy(oldUser.avatar)
             
-              res.send(editedUser)
+                 res.status(200).json({
+                  success: true,
+                  editedUser
+                  })
           } else {
               next(createHttpError(404, `User with id ${req.user._id} does not exist.`))
           }
