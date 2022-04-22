@@ -31,7 +31,7 @@ const UserModel = new Schema(
             minlength: [6, 'Your Password must be longer then 6 characters'],
         },
         avatar:{type: String, 
-          default: "https://res.cloudinary.com/strive01/image/upload/v1650327061/PrettyPages/new.png"
+         
         },
         googleId: {type: String},
         resetPasswordToken: String,

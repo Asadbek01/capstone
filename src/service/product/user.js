@@ -75,22 +75,20 @@ userRouter.get("/me",  JwtAuthMiddleware, async (req, res, next) => {
 })
 userRouter.put('/me/update', JwtAuthMiddleware,  parser.single('avatarImage'), async (req, res, next) => {
   try {
-      if (req.user) {
-          const oldUser = await userSchema.findById(req.user._id)
-          if (oldUser) {
+    if (req.user) {
+      const oldUser = await userSchema.findById(req.user._id)
+      console.log(oldUser.avatar)
+        
               const body = { ...req.body, avatar: req.file?.path || oldUser.avatar, filename: req.file?.filename || oldUser.filename }
               const editedUser = await userSchema.findByIdAndUpdate(req.user._id, body, { new: true })
               if (!editedUser) return next(createHttpError(404, `User with id ${req.user._id} does not exist.`))
-              if (oldUser.filename && req.file) {
-                  await cloudinary.uploader.destroy(oldUser.filename)
-              }
+            
+                 await cloudinary.uploader.destroy(oldUser.avatar)
+            
               res.send(editedUser)
           } else {
               next(createHttpError(404, `User with id ${req.user._id} does not exist.`))
           }
-      } else {
-          next(createHttpError(400, 'Invalid request.'))
-      }
   } catch (error) {
       next(error)
   }
