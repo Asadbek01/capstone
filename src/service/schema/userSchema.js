@@ -30,9 +30,7 @@ const UserModel = new Schema(
             required: [true, 'Insert your password'],
             minlength: [6, 'Your Password must be longer then 6 characters'],
         },
-        avatar:{type: String, 
-         
-        },
+        avatar:{type: String, default: "https://res.cloudinary.com/strive01/image/upload/v1638967983/samples/animals/kitten-playing.gif"  },
         googleId: {type: String},
         resetPasswordToken: String,
         resetPasswordExpire: Date

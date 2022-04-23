@@ -15,7 +15,6 @@ const cloudinaryStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'PrettyPages',
-        format: async (req, file) => "png",
        public_id: (req, file) => "new",
 
     } 
