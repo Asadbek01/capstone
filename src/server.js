@@ -1,52 +1,41 @@
-import express  from "express"
-import cors  from "cors"
-import listEndpoints  from "express-list-endpoints"
-import mongoose  from "mongoose"
-import productRouter from "./service/product/index.js"
-import { notFoundHandler,
-     badRequestHandler,
-      forbiddenError, 
-      genericErrorHandler,
-       unauthorizedError } from "./errorHandlers/index.js"
-import userRouter from "./service/product/user.js"
-import googleStrategy from "./utils/oauth.js"
-import passport from "passport"
-import cookieParser from 'cookie-parser'
+const app = require('./app')
+const connectDatabase = require('./config/database')
 
-const server = express();
-const port = process.env.PORT 
+// const dotenv = require('dotenv');
+const cloudinary = require('cloudinary')
 
+// Handle Uncaught exceptions
+process.on('uncaughtException', err => {
+    console.log(`ERROR: ${err.stack}`);
+    console.log('Shutting down due to uncaught exception');
+    process.exit(1)
+})
 
-server.use(express.json());
-server.use(cookieParser())
+// Setting up config file
+if (process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').config({ path: 'backend/config/config.env' })
+
+// dotenv.config({ path: 'backend/config/config.env' })
 
 
-server.use(cors());
-passport.use("google", googleStrategy)
+// Connecting to database
+connectDatabase();
 
-server.use('/books', productRouter)
-server.use('/users', userRouter)
+// Setting up cloudinary configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
+const server = app.listen(process.env.PORT, () => {
+    console.log(`Server started on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode.`)
+})
 
-// ************ Error Handlers **********
-server.use(notFoundHandler)
-server.use(badRequestHandler)
-server.use(forbiddenError)
-server.use(genericErrorHandler)
-server.use(unauthorizedError)
-
-
-
-
-
-mongoose.connect(process.env.MONGODB_CONNECTION);
-mongoose.connection.on("connected", () => {
-    console.log("Connected to Mongo!");
-    server.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-        console.table(listEndpoints(server));
-    });
-});
-mongoose.connection.on("error", (err) => {
-    console.log(err);
-}); 
+// Handle Unhandled Promise rejections
+process.on('unhandledRejection', err => {
+    console.log(`ERROR: ${err.stack}`);
+    console.log('Shutting down the server due to Unhandled Promise rejection');
+    server.close(() => {
+        process.exit(1)
+    })
+})
