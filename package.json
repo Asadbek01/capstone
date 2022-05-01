@@ -1,8 +1,9 @@
 {
-  "name": "shopit",
+  "name": "prettypages",
   "version": "1.0.0",
   "description": "full ecommerce site using mern",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "SET node backend/server.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
@@ -10,7 +11,6 @@
     "seeder": "node backend/utils/seeder.js",
     "heroku-postbuild" : "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
   },
-  "author": "Ghulam Abbas",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
