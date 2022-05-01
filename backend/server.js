@@ -1,6 +1,6 @@
 import app from './app.js'
 import connectDatabase from './config/database.js'
-
+import listEndpoints from "express-list-endpoints"
 import  dotenv from'dotenv';
 import  cloudinary from'cloudinary'
 
@@ -29,6 +29,7 @@ cloudinary.config({
 
 const server = app.listen(process.env.PORT, () => {
     console.log(`Server started on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode.`)
+    console.table(listEndpoints(server))
 })
 
 // Handle Unhandled Promise rejections
