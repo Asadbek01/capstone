@@ -68,12 +68,10 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   // Get reset token
   const resetToken = user.getResetPasswordToken();
 
-  await user.save({ validateBeforeSave: false });
+  await user.save();
 
   // Create reset password url
-  const resetUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/password/reset/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
 
@@ -92,7 +90,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
-    await user.save({ validateBeforeSave: false });
+    await user.save();
 
     return next(new ErrorHandler(error.message, 500));
   }
