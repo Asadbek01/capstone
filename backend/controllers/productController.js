@@ -5,7 +5,7 @@ import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
 import APIFeatures from "../utils/apiFeatures.js";
 import cloudinary from "cloudinary";
 
-// Create new product   =>   /api/v1/admin/product/new
+// Create new product   =>   /admin/product/new
 export const newProduct = catchAsyncErrors(async (req, res, next) => {
   let images = [];
   if (typeof req.body.images === "string") {
@@ -38,12 +38,12 @@ export const newProduct = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Get all products   =>   /api/v1/products?keyword=apple
+// Get all products   =>   /products?keyword=apple
 export const getProducts = catchAsyncErrors(async (req, res, next) => {
   const resPerPage = 8;
   const productsCount = await Product.countDocuments();
 
-  const apiFeatures = new APIFeatures(Product.find(), req.query)
+  const apiFeatures = new APIFeatures(Product.find(req.query), req.query)
     .search()
     .filter();
 
@@ -61,7 +61,7 @@ export const getProducts = catchAsyncErrors(async (req, res, next) => {
     products,
   });
 });
-// Get all products (Admin)  =>   /api/v1/admin/products
+// Get all products (Admin)  =>   /admin/products
 export const getAdminProducts = catchAsyncErrors(async (req, res, next) => {
   const products = await Product.find();
 
@@ -71,7 +71,7 @@ export const getAdminProducts = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Get single product details   =>   /api/v1/product/:id
+// Get single product details   =>   /product/:id
 export const getSingleProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
@@ -85,7 +85,7 @@ export const getSingleProduct = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Update Product   =>   /api/v1/admin/product/:id
+// Update Product   =>   /admin/product/:id
 export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
 
@@ -136,7 +136,7 @@ export const updateProduct = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Delete Product   =>   /api/v1/admin/product/:id
+// Delete Product   =>   /admin/product/:id
 export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
@@ -159,7 +159,7 @@ export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Create new review   =>   /api/v1/review
+// Create new review   =>   /review
 export const createProductReview = catchAsyncErrors(async (req, res, next) => {
   const { rating, comment, productId } = req.body;
 
@@ -199,7 +199,7 @@ export const createProductReview = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Get Product Reviews   =>   /api/v1/reviews
+// Get Product Reviews   =>   /reviews
 export const getProductReviews = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.query.id);
 
@@ -209,7 +209,7 @@ export const getProductReviews = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Delete Product Review   =>   /api/v1/reviews
+// Delete Product Review   =>   /reviews
 export const deleteReview = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.query.productId);
 
