@@ -24,10 +24,10 @@ import auth from "./routes/auth.js";
 import payment from "./routes/payment.js";
 import order from "./routes/order.js";
 
-app.use("/api/v1", products);
-app.use("/api/v1", auth);
-app.use("/api/v1", payment);
-app.use("/api/v1", order);
+app.use("/", products);
+app.use("/", auth);
+app.use("/", payment);
+app.use("/", order);
 
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "../frontend/build")));
