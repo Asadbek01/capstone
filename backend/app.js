@@ -29,14 +29,6 @@ server.use("/", auth);
 server.use("/", payment);
 server.use("/", order);
 
-if (process.env.NODE_ENV === "PRODUCTION") {
-  server.use(express.static(path.join(__dirname, "../frontend/build")));
-
-  server.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
-  });
-}
-
 // Middleware to handle errors
 server.use(errorMiddleware);
 export default server;
