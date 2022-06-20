@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node backend/server.js",
-    "dev": " nodemon -e js -r dotenv/config backend/server",
-    "prod": "nodemon -e js -r dotenv/config backend/server"   
+    "dev": " nodemon -e js -r dotenv/config backend/server"
   },
   "license": "ISC",
   "dependencies": {
