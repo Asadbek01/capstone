@@ -5,7 +5,6 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
-import path from "path";
 
 import errorMiddleware from "./middlewares/errors.js";
 
